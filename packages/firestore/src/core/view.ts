@@ -311,6 +311,7 @@ export class View {
       // no changes
       return { limboChanges };
     } else {
+      const hasCachedResults = targetChange && targetChange.resumeToken.approximateByteSize() > 0;
       const snap: ViewSnapshot = new ViewSnapshot(
         this.query,
         docChanges.documentSet,
@@ -320,9 +321,7 @@ export class View {
         newSyncState === SyncState.Local,
         syncStateChanged,
         /* excludesMetadataChanges= */ false,
-        targetChange
-          ? targetChange.resumeToken.approximateByteSize() > 0
-          : false
+        hasCachedResults
       );
       return {
         snapshot: snap,
